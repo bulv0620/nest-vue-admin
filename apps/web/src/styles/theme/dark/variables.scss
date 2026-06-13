@@ -1,0 +1,17 @@
+/** dark 主题下的变量 */
+
+$variables: (
+  name: 'dark',
+  // 主题名称
+  bg-color: #151515,
+  // 背景颜色
+  theme-color: #409eff,
+  // 主题色
+  font-color: #c0c4cc,
+  // 默认文字颜色
+  active-font-color: #fff,
+  // active 状态文字颜色
+  hover-color: #fff,
+  // hover 状态文字颜色
+  border-color: #303133 // 边框颜色,,,,,
+);

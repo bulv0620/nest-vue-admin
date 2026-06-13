@@ -1,0 +1,28 @@
+{
+  "name": "nest-vue-admin",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Full-stack RBAC admin system monorepo",
+  "scripts": {
+    "dev:web": "pnpm --filter v3-admin-vite dev",
+    "dev:server": "pnpm --filter server start:dev",
+    "dev": "pnpm run dev:server & pnpm run dev:web",
+    "build:web": "pnpm --filter v3-admin-vite build:prod",
+    "build:server": "pnpm --filter server build",
+    "build": "pnpm run build:shared && pnpm run build:server && pnpm run build:web",
+    "build:shared": "pnpm --filter @nest-vue-admin/shared build",
+    "lint:web": "pnpm --filter v3-admin-vite lint",
+    "lint:server": "pnpm --filter server lint",
+    "lint": "pnpm -r lint",
+    "format": "prettier --write \"**/*.{ts,js,vue,json,css,scss,html,md}\"",
+    "test:web": "pnpm --filter v3-admin-vite test",
+    "test:server": "pnpm --filter server test",
+    "test": "pnpm -r test",
+    "clean": "pnpm -r exec rm -rf dist node_modules"
+  },
+  "engines": {
+    "node": ">=18",
+    "pnpm": ">=8"
+  }
+}

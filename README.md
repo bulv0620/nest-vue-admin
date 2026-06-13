@@ -1,111 +1,217 @@
-# ultimate-rbac-template 🚀
+# Nest Vue Admin
 
-**NestJS + Vue3 用户权限管理系统模板**
+基于 **NestJS + Vue 3** 的全栈 RBAC 用户权限管理系统模板，开箱即用。
 
-🛡️ 开箱即用的 RBAC 解决方案 | 前后端分离架构
+## 技术栈
 
-------
+| 层级 | 技术 |
+|------|------|
+| 前端 | Vue 3、TypeScript、Element Plus、Pinia、Vite |
+| 后端 | NestJS、TypeORM、MySQL、Redis、Passport (JWT) |
+| 共享 | pnpm workspace monorepo、共享类型包 (`@nest-vue-admin/shared`) |
+| 工具 | ESLint (flat config)、Prettier、Vitest、Jest、Swagger |
 
-## ✨ 特性
-
-- **🔐 完整的RBAC实现**：用户-角色-权限三级控制
-- **🚀 现代化技术栈**：Vue3 + Element Plus + NestJS
-- **⚡ 高效开发**：内置代码规范工具链（ESLint + Prettier）
-- **🌐 环境隔离**：开发/测试/生产多环境配置
-
-------
-
-## 📂 项目结构
+## 项目结构
 
 ```
-platform-web/src/
-├── api/               # API请求管理
-├── assets/            # 静态资源
-├── components/        # 公共组件
-├── config/            # 应用配置
-├── constants/         # 常量定义
-├── directives/        # 自定义指令
-├── enums/             # 枚举定义
-├── hooks/             # 组合式函数
-├── icons/             # SVG图标
-├── layouts/           # 布局组件
-├── plugins/           # Vue插件
-├── router/            # 路由配置
-├── store/             # 状态管理
-├── styles/            # 样式文件
-├── utils/             # 工具函数
-├── views/             # 页面视图
-├── App.vue            # 根组件
-└── main.ts            # 应用入口
-platform-server/src/
-├── config/            # 应用配置文件
-├── core/              # 核心基础设施
-├── database/          # 数据库相关
-├── decorators/        # 自定义装饰器
-├── enums/             # 枚举定义
-├── guards/            # 守卫
-├── modules/           # 业务模块
-├── utils/             # 工具类
-├── app.module.ts      # 主模块
-└── main.ts            # 应用入口
+UAC-Template/
+├── apps/
+│   ├── web/                  # Vue 3 前端
+│   └── server/               # NestJS 后端
+├── packages/
+│   └── shared/               # 共享类型 (@uac/shared)
+├── docs/
+│   └── init.sql              # 数据库初始化脚本
+├── pnpm-workspace.yaml       # pnpm workspace 配置
+├── package.json              # 根 workspace 脚本
+├── tsconfig.base.json        # 共享 TypeScript 配置
+├── eslint.config.js          # 共享 ESLint 配置
+├── .prettierrc               # 共享 Prettier 配置
+├── CLAUDE.md                 # Claude Code 指引
 ```
 
-------
+## 快速开始
 
-## 🛠️ 快速开始
+### 前置条件
 
-### 1. 前端启动
+- **Node.js** >= 18
+- **pnpm** >= 8
+- **MySQL** (默认端口 3306)
+- **Redis** (默认端口 6379)
 
-```
-cd platform-web  
-pnpm install  
-pnpm dev  # 开发模式
-```
+### 安装 & 启动
 
-**生产构建**：
+```bash
+# 1. 克隆项目
+git clone <repo-url> && cd UAC-Template
 
-```
-pnpm build:prod  # 生产环境打包  
-pnpm preview:prod  # 本地预览生产包
-```
+# 2. 安装所有依赖
+pnpm install
 
-### 2. 后端启动
+# 3. 初始化数据库
+#    创建 MySQL 数据库，然后导入 docs/init.sql
+#    mysql -u root -p < docs/init.sql
 
-```
-cd platform-server  
-npm install  
-npm run start:dev  # 开发模式（热更新）
-```
+# 4. 配置环境变量
+#    编辑 apps/server/.env.development 填入你的 MySQL 和 Redis 连接信息
+#    默认配置即可运行（需要本地 MySQL 和 Redis）
 
-**测试模式**：
-
-```
-npm run start:test  # 加载测试环境配置
+# 5. 启动开发服务器（后端 + 前端同时启动）
+pnpm dev
 ```
 
-------
+- 后端 API：http://localhost:3000/api
+- Swagger 文档：http://localhost:3000/docs
+- 前端页面：http://localhost:3333
 
-## ⚙️ 脚本说明
+## 命令参考
 
-### 前端 (`platform-web/package.json`)
+### Workspace 根目录
 
-| 命令          | 用途                 |
-| ------------- | -------------------- |
-| `dev`         | 启动开发服务器       |
-| `build:stage` | 构建测试环境包       |
-| `lint`        | 自动修复代码风格问题 |
-| `test`        | 运行Vitest单元测试   |
+```bash
+pnpm dev              # 同时启动前后端开发服务器
+pnpm dev:web          # 仅启动前端 (:3333)
+pnpm dev:server       # 仅启动后端 (:3000)
+pnpm build            # 构建所有包（shared → server → web）
+pnpm lint             # 所有项目代码检查
+pnpm test             # 运行所有测试
+pnpm format           # 统一格式化代码
+```
 
-### 后端 (`platform-server/package.json`)
+### 前端 (`apps/web/`)
 
-| 命令        | 用途                 |
-| ----------- | -------------------- |
-| `start:dev` | 带热更新的开发模式   |
-| `test:e2e`  | 运行端到端测试       |
-| `format`    | 自动格式化所有TS文件 |
+```bash
+pnpm dev              # 开发模式
+pnpm build:prod       # 生产构建
+pnpm build:stage      # 测试环境构建
+pnpm lint             # ESLint + Prettier 检查修复
+pnpm test             # Vitest 单元测试
+```
 
-------
+### 后端 (`apps/server/`)
 
-## 📜 许可证
+```bash
+pnpm run start:dev    # 开发模式（热更新）
+pnpm run start:test   # 测试环境
+pnpm run start:prod   # 生产环境
+pnpm run build        # 编译
+pnpm run lint         # ESLint 检查修复
+pnpm run test         # Jest 单元测试
+pnpm run test:e2e     # E2E 测试
+pnpm run test:cov     # 测试覆盖率
+```
+
+## RBAC 权限模型
+
+```
+User ──many-to-many──> Role ──many-to-many──> Resource
+```
+
+- **User**：用户，支持管理员 (`isAdmin`) 标识
+- **Role**：角色，可设置默认角色 (`isDefault`)，新用户自动分配
+- **Resource**：资源/权限，自引用树形结构（父 → 子），三种类型：
+  - `MENU ('0')`：菜单目录
+  - `PAGE ('1')`：页面/组件
+  - `URL ('2')`：接口地址
+
+管理员 (`isAdmin: true`) 拥有所有权限，跳过资源级鉴权。
+
+### 后端权限控制
+
+两个全局 Guard 按顺序执行：
+
+| Guard | 职责 |
+|-------|------|
+| `AuthTokenGuard` | JWT 验证，`@NoAuth()` 装饰的接口跳过 |
+| `ResourceGuard` | 资源级鉴权，验证用户是否有权访问该资源 |
+
+自定义装饰器：
+
+| 装饰器 | 作用 |
+|--------|------|
+| `@NoAuth()` | 公开接口，无需登录 |
+| `@Everyone()` | 任意已登录用户可访问 |
+| `@Admin()` | 仅管理员可访问 |
+| `@ResourceName('name')` | 声明该控制器对应的资源名，用于资源鉴权 |
+
+### 前端路由权限
+
+前端路由由后端的 Resource 树动态生成：用户登录后，前端获取用户的资源树，`permissionStore` 将其转换为 Vue Router 路由。菜单配置 (`MENU` 类型) 生成布局容器，页面配置 (`PAGE` 类型) 生成叶子路由。
+
+## 环境变量
+
+### 后端 (`apps/server/.env.*`)
+
+```env
+# 数据库
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_USERNAME=root
+MYSQL_PASSWORD=123456
+MYSQL_DATABASE=nestjs
+
+# Redis
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_DB=0
+REDIS_PASSPORT=123456
+
+# JWT
+JWT_SECRET_KEY=nestjs
+JWT_ACCESS_TOKEN_TTL=1h
+JWT_REFRESH_TOKEN_TTL=24h
+
+# 应用端口
+RBAC_APP_PORT=3000
+```
+
+配置文件按环境加载：`.env.development` / `.env.test` / `.env.production`。
+
+### 前端 (`apps/web/.env.*`)
+
+```env
+VITE_APP_TITLE=管理平台
+VITE_BASE_API=/api            # 开发时走 Vite 代理 → localhost:3000
+VITE_ROUTER_HISTORY=hash      # 路由模式：hash | history
+VITE_PUBLIC_PATH=/            # 部署路径
+```
+
+## API 规范
+
+所有接口返回统一格式：
+
+```json
+{
+  "code": 200,
+  "data": { ... },
+  "message": "请求成功"
+}
+```
+
+- `code === 200` 表示成功
+- `code === 401` 前端自动刷新 Token
+- 其他 code 表示业务错误
+
+主要接口：
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| POST | `/api/auth/login` | 登录 |
+| GET | `/api/auth/info` | 获取用户详情和权限 |
+| GET | `/api/auth/refresh` | 刷新 Token |
+| GET | `/api/user` | 用户列表（分页） |
+| POST | `/api/user` | 创建用户 |
+| GET | `/api/role` | 角色列表 |
+| POST | `/api/role` | 创建角色 |
+| GET | `/api/resource` | 资源树 |
+| POST | `/api/resource` | 创建资源 |
+
+完整接口文档：启动后端后访问 `http://localhost:3000/docs`。
+
+## 动态表单/表格
+
+后端 `Field` 实体支持以 JSON 格式存储表单、表格、按钮配置，按 `fieldCode` 分组（通常对应资源 ID）。前端通过 `useFormTable(fieldCode)` 动态拉取配置并渲染对应的表单和表格组件。（`BlFormCard`、`BlTableCard` 等）
+
+## License
 
 MIT © 2025 bulv
